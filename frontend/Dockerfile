@@ -2,9 +2,14 @@ FROM node:alpine as build
 
 WORKDIR /app
 
+COPY package.json yarn.lock ./
+RUN yarn install
+
 COPY . .
 
-RUN yarn
+# Establecer la variable de entorno NODE_OPTIONS
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
 RUN yarn build
 
 #---

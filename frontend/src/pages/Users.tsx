@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Loader, Plus, X } from 'react-feather';
+import { useEffect, useState } from 'react';
+import { Loader, Plus, RefreshCw, X } from 'react-feather';
 import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query';
 
@@ -21,7 +21,7 @@ export default function Users() {
   const [addUserShow, setAddUserShow] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     ['users', firstName, lastName, username, role],
     async () => {
       return (
@@ -34,9 +34,13 @@ export default function Users() {
       ).filter((user) => user.id !== authenticatedUser.id);
     },
     {
-      refetchInterval: 1000,
+      enabled: false,
     },
   );
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const {
     register,
@@ -58,57 +62,67 @@ export default function Users() {
 
   return (
     <Layout>
-      <h1 className="font-semibold text-3xl mb-5">Manage Users</h1>
-      <hr />
-      <button
-        className="btn my-5 flex gap-2 w-full sm:w-auto justify-center"
-        onClick={() => setAddUserShow(true)}
-      >
-        <Plus /> Add User
-      </button>
-
-      <div className="table-filter mt-2">
-        <div className="flex flex-row gap-5">
-          <input
-            type="text"
-            className="input w-1/2"
-            placeholder="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <input
-            type="text"
-            className="input w-1/2"
-            placeholder="Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-row gap-5">
-          <input
-            type="text"
-            className="input w-1/2"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <select
-            name=""
-            id=""
-            className="input w-1/2"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
+      <h1 className="font-semibold bg-brandHeaderBackground mx-auto px-5 sm:px-10 py-8 text-3xl">
+        Manage Users
+      </h1>
+      <div className="mx-auto px-5 sm:px-10 pb-10">
+        <div className="flex align-center gap-5 justify-between">
+          <button
+            className="btn bg-primary hover:bg-red-800 my-5 flex gap-2 w-full sm:w-auto justify-center"
+            onClick={() => setAddUserShow(true)}
           >
-            <option value="">All</option>
-            <option value="user">User</option>
-            <option value="editor">Editor</option>
-            <option value="admin">Admin</option>
-          </select>
+            <Plus /> Add User
+          </button>
+          <button
+            className="btn bg-primary hover:bg-red-800 my-5 flex gap-2 w-max sm:w-auto justify-center"
+            onClick={() => refetch()}
+          >
+            <RefreshCw />
+          </button>
         </div>
+
+        <div className="table-filter mt-2">
+          <div className="flex flex-row gap-5">
+            <input
+              type="text"
+              className="input w-1/2"
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <input
+              type="text"
+              className="input w-1/2"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-row gap-5">
+            <input
+              type="text"
+              className="input w-1/2"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <select
+              name=""
+              id=""
+              className="input w-1/2"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="">All</option>
+              <option value="user">User</option>
+              <option value="editor">Editor</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+
+        <UsersTable data={data || []} isLoading={isLoading} />
       </div>
-
-      <UsersTable data={data} isLoading={isLoading} />
-
       {/* Add User Modal */}
       <Modal show={addUserShow}>
         <div className="flex">
@@ -174,7 +188,10 @@ export default function Users() {
             <option value="editor">Editor</option>
             <option value="admin">Admin</option>
           </select>
-          <button className="btn" disabled={isSubmitting}>
+          <button
+            className="btn bg-primary hover:bg-red-800"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <Loader className="animate-spin mx-auto" />
             ) : (

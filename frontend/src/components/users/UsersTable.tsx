@@ -14,7 +14,7 @@ interface UsersTableProps {
   isLoading: boolean;
 }
 
-export default function UsersTable({ data, isLoading }: UsersTableProps) {
+export default function UsersTable({ data = [], isLoading }: UsersTableProps) {
   const [deleteShow, setDeleteShow] = useState<boolean>(false);
   const [updateShow, setUpdateShow] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -56,62 +56,68 @@ export default function UsersTable({ data, isLoading }: UsersTableProps) {
     <>
       <div className="table-container">
         <Table columns={['Name', 'Username', 'Status', 'Role', 'Created']}>
-          {isLoading
-            ? null
-            : data.map(
-                ({ id, firstName, lastName, role, isActive, username }) => (
-                  <tr key={id}>
-                    <TableItem>{`${firstName} ${lastName}`}</TableItem>
-                    <TableItem>{username}</TableItem>
-                    <TableItem>
-                      {isActive ? (
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Active
-                        </span>
-                      ) : (
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                          Inactive
-                        </span>
-                      )}
-                    </TableItem>
-                    <TableItem>{role}</TableItem>
-                    <TableItem className="text-right">
-                      <button
-                        className="text-indigo-600 hover:text-indigo-900 focus:outline-none"
-                        onClick={() => {
-                          setSelectedUserId(id);
+          {isLoading ? (
+            <tr>
+              <td colSpan={5} className="text-center py-4">
+                Loading...
+              </td>
+            </tr>
+          ) : data.length > 0 ? (
+            data.map(
+              ({ id, firstName, lastName, role, isActive, username }) => (
+                <tr key={id}>
+                  <TableItem>{`${firstName} ${lastName}`}</TableItem>
+                  <TableItem>{username}</TableItem>
+                  <TableItem>
+                    {isActive ? (
+                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        Active
+                      </span>
+                    ) : (
+                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                        Inactive
+                      </span>
+                    )}
+                  </TableItem>
+                  <TableItem>{role}</TableItem>
+                  <TableItem className="text-right">
+                    <button
+                      className="text-indigo-600 hover:text-indigo-900 focus:outline-none"
+                      onClick={() => {
+                        setSelectedUserId(id);
 
-                          setValue('firstName', firstName);
-                          setValue('lastName', lastName);
-                          setValue('username', username);
-                          setValue('role', role);
-                          setValue('isActive', isActive);
+                        setValue('firstName', firstName);
+                        setValue('lastName', lastName);
+                        setValue('username', username);
+                        setValue('role', role);
+                        setValue('isActive', isActive);
 
-                          setUpdateShow(true);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="text-red-600 hover:text-red-900 ml-3 focus:outline-none"
-                        onClick={() => {
-                          setSelectedUserId(id);
-                          setDeleteShow(true);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </TableItem>
-                  </tr>
-                ),
-              )}
+                        setUpdateShow(true);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-red-600 hover:text-red-900 ml-3 focus:outline-none"
+                      onClick={() => {
+                        setSelectedUserId(id);
+                        setDeleteShow(true);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </TableItem>
+                </tr>
+              ),
+            )
+          ) : (
+            <tr>
+              <td colSpan={5} className="text-center py-4">
+                No users found
+              </td>
+            </tr>
+          )}
         </Table>
-
-        {!isLoading && data.length < 1 ? (
-          <div className="text-center my-5 text-gray-500">
-            <h1>Empty</h1>
-          </div>
-        ) : null}
       </div>
       {/* Delete User Modal */}
       <Modal show={deleteShow}>
@@ -120,8 +126,8 @@ export default function UsersTable({ data, isLoading }: UsersTableProps) {
           <h3 className="mb-2 font-semibold">Delete User</h3>
           <hr />
           <p className="mt-2">
-            Are you sure you want to delete the user? All of user's data will be
-            permanently removed.
+            Are you sure you want to delete the user? All of user&apos;s data
+            will be permanently removed.
             <br />
             This action cannot be undone.
           </p>
@@ -222,7 +228,10 @@ export default function UsersTable({ data, isLoading }: UsersTableProps) {
               {...register('isActive')}
             />
           </div>
-          <button className="btn" disabled={isSubmitting}>
+          <button
+            className="btn bg-primary hover:bg-red-800"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <Loader className="animate-spin mx-auto" />
             ) : (

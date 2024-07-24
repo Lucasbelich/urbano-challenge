@@ -114,8 +114,8 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
           <h3 className="mb-2 font-semibold">Delete Course</h3>
           <hr />
           <p className="mt-2">
-            Are you sure you want to delete the course? All of course's data
-            will be permanently removed.
+            Are you sure you want to delete the course? All of course&apos;s
+            data will be permanently removed.
             <br />
             This action cannot be undone.
           </p>
@@ -185,7 +185,10 @@ export default function CoursesTable({ data, isLoading }: UsersTableProps) {
             disabled={isSubmitting}
             {...register('description')}
           />
-          <button className="btn" disabled={isSubmitting}>
+          <button
+            className="btn bg-primary hover:bg-red-800"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <Loader className="animate-spin mx-auto" />
             ) : (

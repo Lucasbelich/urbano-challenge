@@ -6,6 +6,15 @@
   html,
   body,
   #root {
+    --brand-primary: #c1292e;
+    --brand-background: #ffffff;
+    --brand-active: #c1292e;
+    --brand-header-background: #e2e1e1;
+    --primary-red: #c1292e;
+    --red-hover: #c1292e;
+    --primary-white: #ffffff;
+    --white-hover: #f2f2f2;
+    font-family: Roboto, Helvetica, Helvetica Neue, Nunito Sans;
     @apply h-full;
   }
   h1 {

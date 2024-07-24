@@ -55,39 +55,40 @@ export default function Course() {
 
   return (
     <Layout>
-      <h1 className="font-semibold text-3xl mb-5">
+      <h1 className="font-semibold bg-brandHeaderBackground mx-auto px-5 sm:px-10 py-8 text-3xl">
         {!userQuery.isLoading ? `${userQuery.data.name} Contents` : ''}
       </h1>
-      <hr />
-      {authenticatedUser.role !== 'user' ? (
-        <button
-          className="btn my-5 flex gap-2 w-full sm:w-auto justify-center"
-          onClick={() => setAddContentShow(true)}
-        >
-          <Plus /> Add Content
-        </button>
-      ) : null}
+      <div className="mx-auto px-5 sm:px-10 pb-10">
+        {authenticatedUser.role !== 'user' ? (
+          <button
+            className="btn bg-primary hover:bg-red-800 my-5 flex gap-2 w-full sm:w-auto justify-center"
+            onClick={() => setAddContentShow(true)}
+          >
+            <Plus /> Add Content
+          </button>
+        ) : null}
 
-      <div className="table-filter">
-        <div className="flex flex-row gap-5">
-          <input
-            type="text"
-            className="input w-1/2"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="text"
-            className="input w-1/2"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+        <div className="table-filter">
+          <div className="flex flex-row gap-5">
+            <input
+              type="text"
+              className="input w-1/2"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="text"
+              className="input w-1/2"
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
         </div>
-      </div>
 
-      <ContentsTable data={data} isLoading={isLoading} courseId={id} />
+        <ContentsTable data={data} isLoading={isLoading} courseId={id} />
+      </div>
 
       {/* Add User Modal */}
       <Modal show={addContentShow}>
@@ -125,7 +126,10 @@ export default function Course() {
             required
             {...register('description')}
           />
-          <button className="btn" disabled={isSubmitting}>
+          <button
+            className="btn bg-primary hover:bg-red-800"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <Loader className="animate-spin mx-auto" />
             ) : (

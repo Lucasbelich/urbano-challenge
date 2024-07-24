@@ -121,8 +121,8 @@ export default function ContentsTable({
           <h3 className="mb-2 font-semibold">Delete Content</h3>
           <hr />
           <p className="mt-2">
-            Are you sure you want to delete the content? All of content's data
-            will be permanently removed.
+            Are you sure you want to delete the content? All of content&apos;s
+            data will be permanently removed.
             <br />
             This action cannot be undone.
           </p>
@@ -194,7 +194,10 @@ export default function ContentsTable({
               disabled={isSubmitting}
               {...register('description')}
             />
-            <button className="btn" disabled={isSubmitting}>
+            <button
+              className="btn bg-primary hover:bg-red-800"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
                 <Loader className="animate-spin mx-auto" />
               ) : (

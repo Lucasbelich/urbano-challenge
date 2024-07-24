@@ -50,37 +50,40 @@ export default function Courses() {
 
   return (
     <Layout>
-      <h1 className="font-semibold text-3xl mb-5">Manage Courses</h1>
-      <hr />
-      {authenticatedUser.role !== 'user' ? (
-        <button
-          className="btn my-5 flex gap-2 w-full sm:w-auto justify-center"
-          onClick={() => setAddCourseShow(true)}
-        >
-          <Plus /> Add Course
-        </button>
-      ) : null}
+      <h1 className="font-semibold bg-brandHeaderBackground mx-auto px-5 sm:px-10 py-8 text-3xl">
+        Manage Courses
+      </h1>
+      <div className="mx-auto px-5 sm:px-10 pb-10">
+        {authenticatedUser.role !== 'user' ? (
+          <button
+            className="btn bg-primary hover:bg-red-800 my-5 flex gap-2 w-full sm:w-auto justify-center"
+            onClick={() => setAddCourseShow(true)}
+          >
+            <Plus /> Add Course
+          </button>
+        ) : null}
 
-      <div className="table-filter">
-        <div className="flex flex-row gap-5">
-          <input
-            type="text"
-            className="input w-1/2"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="text"
-            className="input w-1/2"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+        <div className="table-filter">
+          <div className="flex flex-row gap-5">
+            <input
+              type="text"
+              className="input w-1/2"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="text"
+              className="input w-1/2"
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
         </div>
-      </div>
 
-      <CoursesTable data={data} isLoading={isLoading} />
+        <CoursesTable data={data} isLoading={isLoading} />
+      </div>
 
       {/* Add User Modal */}
       <Modal show={addCourseShow}>
@@ -118,7 +121,10 @@ export default function Courses() {
             required
             {...register('description')}
           />
-          <button className="btn" disabled={isSubmitting}>
+          <button
+            className="btn bg-primary hover:bg-red-800"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <Loader className="animate-spin mx-auto" />
             ) : (
